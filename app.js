@@ -5,14 +5,14 @@ var express 		= require('express'),
 	LocalStrategy	= require('passport-local'),
 	bodyParser		= require('body-parser'),
 	methodOverride 	= require('method-override');
+	ejs				= require('ejs')
 
 var Comment		= require('./models/Comment'),
 	Product 	= require('./models/Product'),
 	Transaction = require('./models/Transaction'),
 	User		= require('./models/User');
 
-app.set("view engine", "ejs");
-
+//MIDDLEWARES
 app.use(require("express-session")({
 	secret: "Tugas IF3152 - Rekayasa Perangkat Lunak",
 	resave: false,
@@ -25,10 +25,54 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static("/views"));
+app.set("view engine", "ejs");``
+//mongoose.connect("mongodb://localhost/shopeedia");
+//END OF MIDDLEWARES
 
+//INDEX PAGE
 app.get("/", function(req, res){
 	res.send("This is the index page");
 })
+
+//AUTHENTICATION
+app.get("/register", function(req, res){
+    res.render("register");
+});
+
+app.post("/register", function(req, res){
+    User.register(new User({username : req.body.username}), req.body.password, function(err, user){
+        if (err) {
+            console.log(err);
+            return res.render("/register");
+        }
+        passport.authenticate("local")(req, res, function(){
+            res.redirect("/catalogs");
+        });
+    });
+});
+
+app.get("/login", function(req, res){
+	res.render("login")
+});
+
+app.post("/login", passport.authenticate("local", {
+	successRedirect : "/catalog",
+	failureRedirect : "/login"
+	}), function(req, res) {
+});
+
+app.get("/logout", function(req, res){
+	req.logout();
+	res.redirect("/");
+});
+//END OF AUTHENTICATION
+
+//ROUTES FOR PRODUCTS AND CATALOG
+app.get("/catalog", function(req, res){
+	res.render("catalog");
+});
 
 app.listen("3152", function(req, res){
 	console.log("Shopeedia server is up and running!");
