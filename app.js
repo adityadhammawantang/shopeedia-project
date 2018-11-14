@@ -4,13 +4,14 @@ var express 		= require('express'),
 	passport		= require('passport'),
 	LocalStrategy	= require('passport-local'),
 	bodyParser		= require('body-parser'),
-	methodOverride 	= require('method-override');
-	ejs				= require('ejs')
+	methodOverride 	= require('method-override'),
+	ejs				= require('ejs'),
+	seedDB			= require('./seeds');
 
-var Comment		= require('./models/Comment'),
-	Product 	= require('./models/Product'),
-	Transaction = require('./models/Transaction'),
-	User		= require('./models/User');
+var Comment		= require('./models/comment'),
+	Product 	= require('./models/product'),
+	Transaction = require('./models/transaction'),
+	User		= require('./models/user');
 
 //MIDDLEWARES
 app.use(require("express-session")({
@@ -28,10 +29,12 @@ passport.deserializeUser(User.deserializeUser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("/views"));
 app.set("view engine", "ejs");``
-//mongoose.connect("mongodb://localhost/shopeedia");
+mongoose.connect("mongodb://localhost/shopeedia");
 //END OF MIDDLEWARES
 
 //INDEX PAGE
+//seedDB();
+
 app.get("/", function(req, res){
 	res.send("This is the index page");
 })
