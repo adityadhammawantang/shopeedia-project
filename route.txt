@@ -9,6 +9,7 @@ GET     /register           registration page
 GET     /login              login page
 POST    /register           create new user
 POST    /login              login
+GET     /logout             logout
 
 products & catalog
 GET     /catalog            show catalog page

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Masuk</title>
+  <link rel="stylesheet" href="/login.css" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+
+</head>
+
+<body>
+  <form action="/login" method="post">
+    <div class="imgcontainer">
+      <img src="assets/logo.png" alt="Avatar" class="avatar">
+    </div>
+
+    <div class="container col-4">
+      <label class="biru" for="username"><b>Username</b></label>
+      <input type="text" placeholder="Masukkan Username" name="username" required>
+
+      <label class="biru" for="password"><b>Password</b></label>
+      <input type="password" placeholder="Masukkan Password" name="password" required>
+
+      <button class="button" type="submit"><strong>Masuk</strong></button>
+
+      <div id="outer">
+        <p class="psw">Lupa <a href="#">password?</a></p>
+      </div>
+      <div class="container register">
+        <p id="askregister">Baru di sini? <a href="/register">Daftar</a>.</p>
+      </div>
+    </div>
+
+  </form>
+</body>
+
+</html>

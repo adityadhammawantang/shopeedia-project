@@ -3,6 +3,7 @@ body {
     font-family: arial;
     font-size: 30px;
 }
+
 form {
     border: 3px solid #ffffff;
 }
@@ -46,8 +47,9 @@ button:hover {
     margin: 24px 0 12px 0;
 }
 
-.biru {
+.subtitle {
   color: #004D99;
+  padding: 0 10px;
 }
 
 /* Avatar image */
@@ -62,7 +64,8 @@ img.avatar {
 }
 
 #outer {
-    background-color: #ffffff
+    background-color: #ffffff;
+    margin: 1rem 0;
 }
 
 /* The "Forgot password" text */
@@ -118,6 +121,10 @@ hr {
   opacity: 0.9;
 }
 
+#askregister {
+    margin:0;
+}
+
 .registerbtn:hover {
   opacity:1;
 }
@@ -131,32 +138,33 @@ a {
 .signin {
   background-color: #f1f1f1;
   text-align: center;
+  margin    : auto;
 }
 
 .register {
   background-color: #f1f1f1;
   text-align: center;
+  padding:1.5rem;
 }
 
 table, th, td {
-    border: 1px solid #eee;
     border-collapse: collapse;
 }
 
+.asklogin {
+    margin:0.6rem;
+}
+
 th, td {
-    padding: 15px;
+    padding: 20px 10px;
 }
 
 th {
     text-align: left;
 }
 
-table {
-    border-spacing: 5px;
-}
-
 table#t01 tr:nth-child(even) {
-    background-color: #DBE3EE;
+    background-color: #FAFAFA;
 }
 table#t01 tr:nth-child(odd) {
     background-color: #fff;

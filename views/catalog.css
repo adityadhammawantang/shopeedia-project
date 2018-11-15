@@ -1,4 +1,4 @@
-<style>
+
     * {
         box-sizing: border-box;
     }
@@ -28,9 +28,12 @@
         list-style-type: none;
         padding: 0;
     }
+
     nav li{
         font-family: 'Montserrat',sans-serif;
         color: black;
+    }
+
     article {
         float: left;
         padding: 20px;
@@ -81,6 +84,3 @@
         margin-right: auto;
         width: 50%;
     }
-
-    
-    </style>;

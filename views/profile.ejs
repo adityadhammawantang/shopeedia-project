@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Profil</title>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://bootswatch.com/4/simplex/bootstrap.min.css" />
+	<link rel="stylesheet" href="login.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	 crossorigin="anonymous">
+</head>
+
+<body>
+	<% include partials/navbar.ejs %>
+	<div class="container">
+		<div class="biru">
+			<h1> Profil Anda</h1>
+			<hr>
+		</div>
+		<div class="row">
+			<div class="container col-md">
+				<h3 class="subtitle"> <strong>
+						<%=user.name%> </strong> </h3>
+				<br>
+				<table id="t01" style="width:100%">
+					<tr>
+						<td><strong> Username: </strong><br>
+							<%=user.username%>
+						</td>
+					</tr>
+					<tr>
+						<td><strong> Alamat: </strong><br>
+							<%=user.address%>
+						</td>
+					</tr>
+					<tr>
+						<td><strong> Nomor Telepon: </strong><br>
+							<%=user.phone%>
+						</td>
+					</tr>
+					<tr>
+						<td><strong> Email: </strong><br>
+							<%=user.email%>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="container col-md-8">
+				<h3 class="subtitle"> <strong>
+						Histori Transaksi </strong> </h3>
+				<br>
+				<table id="t01" style="width:100%">
+					<tr>
+						<th>Tanggal</th>
+						<th>Total Biaya</th>
+						<th>Status</th>
+					</tr>
+					<tr>
+						<td>21 Maret 2018</td>
+						<td>Rp 99.000,00</td>
+						<td>Selesai</td>
+					</tr>
+					<tr>
+						<td>17 Juni 2018</td>
+						<td>Rp 30.000,00</td>
+						<td>Sedang dikirim</td>
+					</tr>
+					<tr>
+						<td>21 Maret 2018</td>
+						<td>Rp 99.000,00</td>
+						<td>Selesai</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!-- </div> -->
+
+
+</body>
+
+</html>

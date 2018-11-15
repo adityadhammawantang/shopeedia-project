@@ -4,10 +4,10 @@ var mongoose = require('mongoose'),
 var userSchema = new mongoose.Schema({
     username: String,
     password: String,
-    nama	: String,
-    alamat	: String,
+    name	: String,
+    address	: String,
     email	: String,
-    nomorTelepon: String,
+    phone   : String,
     cart	: {
     	product : {
     		type: mongoose.Schema.Types.ObjectId,
