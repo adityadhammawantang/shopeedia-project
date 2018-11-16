@@ -2,14 +2,14 @@
 <html>
 
 <head>
-	<title>Daftar</title>
-	<link rel="stylesheet" href="./login.css">
+	<title>Tambahkan Produk</title>
+	<link rel="stylesheet" href="/login.css" type="text/css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
 	 crossorigin="anonymous">
+
 </head>
 
 <body>
-
 	<nav class="navbar navbar-default bg-light">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="/catalog">
@@ -52,36 +52,34 @@
 		</div>
 		<% } %>
 	</div>
-	<form action="/register" method="post">
+
+	<form action="/catalog" method="post">
 		<div class="imgcontainer">
-			<img src="./assets/logo.png" alt="Avatar" class="avatar">
+			<img src="assets/logo.png" alt="Avatar" class="avatar">
 		</div>
 
-		<div class="container col-md-5">
-			<div>
-				<h1> Daftar</h1>
-				<p>Silahkan isi form untuk membuat akun.</p>
-				<hr>
-			</div>
-			<label class="biru" for="email"><b>Email</b></label>
-			<input type="text" placeholder="Masukkan Email" name="email" required>
-			<label class="biru" for="username"><b>Username</b></label>
-			<input type="text" placeholder="Masukkan Username" name="username" required>
-			<label class="biru" for="password"><b>Password</b></label>
-			<input type="password" placeholder="Masukkan Password" name="password" required>
-			<label class="biru" for="name"><b>Nama</b></label>
-			<input type="text" placeholder="Masukkan Nama Anda" name="name" required>
-			<label class="biru" for="address"><b>Alamat</b></label>
-			<input type="text" placeholder="Masukkan Alamat" name="address" required>
-			<label class="biru" for="phone"><b>Nomor Telepon</b></label>
-			<input type="text" placeholder="Masukkan Nomor Telepon" name="phone" required>
-			<!-- <p>Dengan membuat akun, Anda setuju dengan <a href="#">Syarat & Ketentuan</a> kami.</p> -->
-			<hr>
-			<button type="submit" class="registerbtn"><strong>Daftar</strong></button>
+		<div class="container col-4">
+			<label class="biru" for="product[productName]"><b>Nama Produk</b></label>
+			<input type="text" placeholder="Nama Produk" name="product[productName]" required>
 
-			<div class="container signin">
-				<p class="asklogin">Sudah punya akun? <a href="/login">Masuk</a>.</p>
-			</div>
+			<label class="biru" for="product[price]"><b>Harga</b></label>
+			<input type="text" placeholder="Harga" name="product[price]" required>
+
+			<label class="biru" for="product[discount]"><b>Diskon</b></label>
+			<input type="text" placeholder="Harga" name="product[discount]">
+
+			<label class="biru" for="product[category]"><b>Kategori</b></label>
+			<input type="text" placeholder="Kategori" name="product[category]" required>
+			<label class="biru" for="product[stock]"><b>Jumlah Tersedia</b></label>
+			<input type="text" placeholder="Jumlah tersedia" name="product[stock]" required>
+			<label class="biru" for="product[image]"><b>Tautan gambar</b></label>
+			<input type="text" placeholder="Gambar" name="product[image]" required>
+			<label class="biru" for="product[description]"><b>Deskripsi Produk</b></label>
+			<input type="text" placeholder="Deskripsi Produk" name="product[description]" required>
+
+			<button class="button" type="submit"><strong>Tambahkan</strong></button>
+
+		</div>
 		</div>
 
 	</form>

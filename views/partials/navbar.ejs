@@ -1,18 +1,42 @@
-        <nav class="navbar navbar-default bg-light">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/">Shopeedia</a>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                            <% if (!currentUser) { %>
-                                <li><a href="/login">Login</a></li>
-                                <li><a href="/register">Sign Up</a></li>
-                            <% } else { %>
-                                <li><a href="#">Signed in as <strong><%=currentUser.username%></strong></a></li>
-                                <li><a href="/logout">Logout</a></li>
-                            <% } %>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+<nav class="navbar navbar-default bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/catalog">
+            <img src="assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            Shopeedia
+        </a>
+        <% if (!currentUser) { %>
+        <span class="navbar-text">
+            <a href="/login">Login</a>
+            <span>&nbsp;&nbsp;&nbsp;</span>
+            <a href="/register">Sign Up</a>
+        </span>
+        <% } else { %>
+        <span class="navbar-text">
+            <% if (currentUser.username == "admin") { %>
+            <a href="/dashboard"><strong>
+                    Dashboard</strong>
+            </a>
+            <% } else { %>
+            <a href="/profile">
+                Profile <strong>
+                    <%=currentUser.username%></strong>
+            </a>
+            <% } %>
+            <span>&nbsp;&nbsp;&nbsp;</span>
+            <a href="/logout">Logout</a>
+        </span>
+        <% } %>
+    </div>
+</nav>
+
+<div class=container>
+    <% if (flashError && flashError.length > 0) { %>
+    <div class="alert alert-danger" role="alert">
+        <%=flashError%>
+    </div>
+    <% } else if (flashSuccess && flashSuccess.length > 0) { %>
+    <div class="alert alert-success" role="alert">
+        <%=flashSuccess%>
+    </div>
+    <% } %>
+</div>

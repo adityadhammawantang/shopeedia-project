@@ -4,7 +4,6 @@
    
   html,
   body {
-    font-family: 'Montserrat', sans-serif;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -71,13 +70,13 @@
   }
    
   .back-btn {
-    color: #f62f5e;
+    color: #004D99;
     background: #fff;
   }
    
   .next-btn {
     color: #fff;
-    background: #f62f5e;
+    background: #004D99;
   }
    
   .btn:focus {

@@ -11,7 +11,7 @@ var dataProduk = [
         discount	: 0,
         category	: "Alat Tulis",
         stock		: 1000,
-        image		: "",
+        image		: "assets/book.png",
         description	: "Buku tulis berkualitas, ukuran B5 dengan garis 0.8mm. Kertas yang digunakan berwarna kuning sehingga tidak menyakitkan mata",
         comments	: []
     },
@@ -21,7 +21,7 @@ var dataProduk = [
         discount	: 0,
         category	: "Alat Tulis",
         stock		: 1500,
-        image		: "",
+        image		: "assets/pen.png",
         description	: "Tersedia dalam berbagai warna, nyaman digunakan, tinta tidak mudah macet.",
         comments	: []
     },
@@ -31,13 +31,18 @@ var dataProduk = [
         discount	: 0,
         category	: "Alat Tulis",
         stock		: 800,
-        image		: "",
+        image		: "assets/pencil.jpg",
         description	: "Pensil, tersedia dalam berbagai ketebalan, dari HB hingga B8",
         comments	: []
     }
 ]
 
 function seedDB() {
+    Product.remove({}, function(err){
+        if (err){
+            console.log(err);
+        }
+    });
     dataProduk.forEach(function(seed){
         Product.create(seed, function(err, product){
             if (err) {

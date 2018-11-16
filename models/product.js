@@ -8,12 +8,12 @@ var productSchema = new mongoose.Schema({
     stock		: Number,
     image		: String,
     description	: String,
-    // comments	: [
-    // 	{
-    //         type : mongoose.Schema.Types.ObjectId,
-    //         ref : "Comment"
-    //     }
-    // ]
+    comments	: [
+    	{
+            type : mongoose.Schema.Types.ObjectId,
+            ref : "Comment"
+        }
+    ]
 });
 
 module.exports = mongoose.model("Product", productSchema);

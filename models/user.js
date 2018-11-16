@@ -9,11 +9,8 @@ var userSchema = new mongoose.Schema({
     email	: String,
     phone   : String,
     cart	: {
-    	product : {
-    		type: mongoose.Schema.Types.ObjectId,
-    		ref : "Product"
-    	},
-    	quantity : Number,
+        type: mongoose.Schema.Types.ObjectId,
+        ref : "Cart"
     }
 });
 
