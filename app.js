@@ -11,7 +11,6 @@ var express = require('express'),
 
 var Comment = require('./models/comment'),
 	Product = require('./models/product'),
-	Cart = require('./models/cart'),
 	Transaction = require('./models/transaction'),
 	User = require('./models/user');
 
@@ -59,7 +58,6 @@ app.get("/profile", isLoggedIn, function (req, res) {
 		if (err) {
 			console.log(err);
 		} else {
-			console.log(theUser);
 			res.render("profile", { user: theUser });
 		}
 	});
@@ -110,6 +108,10 @@ app.get("/catalog", function (req, res) {
 	});
 });
 
+app.get("/catalog/add", function (req, res) {
+	res.render("addProduct");
+})
+
 //havent made the front-end yet
 app.get("/catalog/:id", function (req, res) {
 	Product.findById(req.params.id).populate('comments').exec(function (err, theProduct) {
@@ -121,9 +123,6 @@ app.get("/catalog/:id", function (req, res) {
 	});
 });
 
-app.get("/addProduct", function (req, res) {
-	res.render("addProduct");
-})
 
 app.post("/catalog", isAdmin, function (req, res) {
 	var newProduct = req.body.product;
@@ -138,10 +137,72 @@ app.post("/catalog", isAdmin, function (req, res) {
 
 //END OF PRODUCTS AND CATALOGS
 
+//ROUTES FOR ADMIN FUNCTIONS
+app.get("/dashboard", function (req, res) {
+	res.render("dashboard");
+});
+
+//END OF ADMIN FUNCTION
+
 //ROUTES FOR PAYMENT AND CHECKOUT
 
 app.get("/checkout", function (req, res) {
-	res.render("checkout", { user: req.user });
+	User.findById(req.user._id, function (err, theUser) {
+		if (err) {
+			console.log(err);
+		} else {
+			if (!Array.isArray(theUser.cart) || !theUser.cart.length) {
+				res.redirect('back');
+				req.flash("flash-error", "Anda belum memiliki belanjaan");
+			} else {
+				var productList = [];
+				var subtotal = 0;
+				theUser.cart.forEach(function (cartItem, index, array) {
+					Product.findById(cartItem.product, function (err, cartProduct) {
+						if (err) {
+							console.log(err);
+						} else {
+							var p = {
+								productName: cartProduct.productName,
+								quantity: cartItem.quantity,
+								sub: cartProduct.price * cartItem.quantity
+							}
+							productList.push(p);
+							subtotal += cartProduct.price * cartItem.quantity;
+
+							if (index === array.length - 1) {
+								res.render("checkout", { user: theUser, cart: productList, total: subtotal })
+							}
+						}
+					});
+				});
+			}
+		}
+	});
+});
+
+app.post("/checkout", function (req, res) {
+	var newTransaction = {
+		user: req.user._id,
+		status: "confirmed",
+		sum: req.body.sum,
+		date1: new Date()
+	}
+
+	//var date = timestamp.getDate() + "-" + (timestamp.getMonth()+1) + "-" + timestamp.timestamp.getFullYear()
+	Transaction.create(newTransaction, function (err, newT) {
+		if (err) {
+			console.log(err);
+		} else {
+			User.findById(req.user._id, function (err, theUser) {
+				theUser.cart = [];
+				theUser.save();
+				console.log(theUser);
+			});
+			res.render("shipment", { transaction: newT });
+		}
+	});
+
 });
 
 //ROUTES FOR PROFILE, CART, AND HISTORY
@@ -163,10 +224,10 @@ app.post("/cart/:id", isLoggedIn, function (req, res) {
 				theUser.cart = newCart;
 				theUser.save();
 				req.flash("flash-success", "Added successfully to your cart");
-				
+
 			} else {
 				addingCart = []
-				theUser.cart.forEach(function(previousCart){
+				theUser.cart.forEach(function (previousCart) {
 					addingCart.push(previousCart);
 				})
 				newCart = {
@@ -200,7 +261,7 @@ function isAdmin(req, res, next) {
 			return next();
 		} else {
 			req.flash("flash-error", "You are not permitted to do this");
-			res.redirect("/login");
+			res.redirect('back');
 			return;
 		}
 	}

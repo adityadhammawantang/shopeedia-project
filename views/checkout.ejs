@@ -55,7 +55,7 @@
         </div>
         <% } %>
     </div>
-    
+
     <div class="container"></div>
 
     <div class="checkout-panel">
@@ -71,30 +71,45 @@
                             <th scope="col">Total</th>
                         </tr>
                     </thead>
-                    <% if (currentUser.cart) { %>
+                    <% if (cart) { %>
                     <tbody>
-                        <%user.cart.forEach(function(cartProduct){ %>
+                        <% cart.forEach(function(cartItem){ %>
                         <tr>
                             <td>
-                                <%=cartProduct.product.productName%>
+                                <%=cartItem.productName%>
                             </td>
                             <td>
-                                <%=cartProduct.quantity%>
+                                <%=cartItem.quantity%>
                             </td>
                             <td>
-                                <%=cartProduct.product.price * cartProduct.quantity%>
+                                <%=cartItem.sub%>
                             </td>
                         </tr>
                         <% }) %>
+                        <% } %>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <strong>Subtotal</strong>
+                            </td>
+                            <td style="width:200px">
+                                <form action="/checkout" method="post">
+                                    <div class="form-group">
+                                        <input class="form-control" name="sum" type="number" value="<%=total%>" placeholder="<%=total%>"
+                                            readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="btn btn-success" type="submit">
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
                     </tbody>
-                    <% } %>
                 </table>
-
             </div>
             <br>
             <br>
-            
-
+<!-- 
             <div class="input text">
                 <h5 class="input-text">Unggah bukti pembayaran</h5>
             </div>
@@ -116,7 +131,8 @@
                 <button class="btn back-btn">Kembali</button>
                 <button class="btn next-btn">Kirim</button>
             </div>
-        </div>
+        </div> -->
+
 
     </div>
 

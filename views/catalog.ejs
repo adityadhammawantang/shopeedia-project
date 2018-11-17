@@ -44,9 +44,15 @@
 				</a>
 				<% } else { %>
 				<a href="/profile">
-					Profile <strong>
+					Welcome, <strong>
 						<%=currentUser.username%></strong>
 				</a>
+				<span>&nbsp;&nbsp;&nbsp;</span>
+				<% } %>
+				<% if (Array.isArray(currentUser.cart) && currentUser.cart.length ) { %>
+					<a href="/checkout">
+						 <strong> Checkout </strong>
+					</a>
 				<% } %>
 				<span>&nbsp;&nbsp;&nbsp;</span>
 				<a href="/logout">Logout</a>
