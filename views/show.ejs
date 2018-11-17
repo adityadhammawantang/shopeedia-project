@@ -15,12 +15,16 @@
 
 <body>
 
-    	<nav class="navbar navbar-default bg-light">
+        <nav class="navbar navbar-default bg-light" style="z-index:2">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="/catalog">
                         <img src="assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
                         Shopeedia
                     </a>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
                     <% if (!currentUser) { %>
                     <span class="navbar-text">
                         <a href="/login">Login</a>
@@ -29,10 +33,22 @@
                     </span>
                     <% } else { %>
                     <span class="navbar-text">
-                        <a href="/profile/<%=currentUser._id%>">Signed in as
-                            <strong>
+                        <% if (currentUser.username == "admin") { %>
+                        <a href="/dashboard"><strong>
+                                Dashboard</strong>
+                        </a>
+                        <% } else { %>
+                        <a href="/profile">
+                            Welcome, <strong>
                                 <%=currentUser.username%></strong>
                         </a>
+                        <span>&nbsp;&nbsp;&nbsp;</span>
+                        <% } %>
+                        <% if (Array.isArray(currentUser.cart) && currentUser.cart.length ) { %>
+                            <a href="/checkout">
+                                 <strong> Checkout </strong>
+                            </a>
+                        <% } %>
                         <span>&nbsp;&nbsp;&nbsp;</span>
                         <a href="/logout">Logout</a>
                     </span>
@@ -85,6 +101,11 @@
                     </div>
                 </form>
             </div>
+        </div>
+        <div class="row">
+            <ul class="list-group-flush">
+                
+            </ul>
         </div>
     </div>
 

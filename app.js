@@ -31,7 +31,12 @@ app.use(flash());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/views"));
 app.set("view engine", "ejs");
-mongoose.connect("mongodb://localhost/shopeedia");
+
+const databaseUri = 'mongodb://root:if3152@ds155663.mlab.com:55663/shopeedia-project' || 'mongodb://localhost/yelp_camp';
+
+mongoose.connect(databaseUri)
+      .then(() => console.log(`Database connected`))
+      .catch(err => console.log(`Database connection error: ${err.message}`));
 
 app.use(function (req, res, next) {
 	res.locals.currentUser = req.user;
@@ -138,7 +143,7 @@ app.post("/catalog", isAdmin, function (req, res) {
 //END OF PRODUCTS AND CATALOGS
 
 //ROUTES FOR ADMIN FUNCTIONS
-app.get("/dashboard", function (req, res) {
+app.get("/dashboard", isAdmin, function (req, res) {
 	res.render("dashboard");
 });
 

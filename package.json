@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "==================",
   "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "@types/connect-flash": "0.0.34",
     "body-parser": "^1.18.3",
@@ -17,9 +21,6 @@
     "passport-local-mongoose": "^5.0.1"
   },
   "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/m-vd/shopeedia-project.git"
