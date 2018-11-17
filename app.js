@@ -32,11 +32,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/views"));
 app.set("view engine", "ejs");
 
-const databaseUri = 'mongodb://root:if3152@ds155663.mlab.com:55663/shopeedia-project' || 'mongodb://localhost/yelp_camp';
+//mongoose.connect('mongodb://localhost/shopeedia')
+
+const databaseUri = 'mongodb://root:if3152@ds155663.mlab.com:55663/shopeedia-project' || 'mongodb://localhost/shopeedia';
 
 mongoose.connect(databaseUri)
-      .then(() => console.log(`Database connected`))
-      .catch(err => console.log(`Database connection error: ${err.message}`));
+    //   .then(() => console.log(`Database connected`))
+    //   .catch(err => console.log(`Database connection error: ${err.message}`));
 
 app.use(function (req, res, next) {
 	res.locals.currentUser = req.user;
@@ -274,6 +276,6 @@ function isAdmin(req, res, next) {
 	res.redirect("/login");
 }
 
-app.listen("3152", function (req, res) {
+app.listen(process.env.PORT, function (req, res) {
 	console.log("Shopeedia server is up and running!");
 });

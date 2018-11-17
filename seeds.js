@@ -12,8 +12,7 @@ var dataProduk = [
         category	: "Alat Tulis",
         stock		: 1000,
         image		: "assets/book.png",
-        description	: "Buku tulis berkualitas, ukuran B5 dengan garis 0.8mm. Kertas yang digunakan berwarna kuning sehingga tidak menyakitkan mata",
-        comments	: []
+        description	: "Buku tulis berkualitas, ukuran B5 dengan garis 0.8mm. Kertas yang digunakan berwarna kuning sehingga tidak menyakitkan mata"
     },
     {
         productName	: "Ballpoint",
@@ -22,8 +21,7 @@ var dataProduk = [
         category	: "Alat Tulis",
         stock		: 1500,
         image		: "assets/pen.png",
-        description	: "Tersedia dalam berbagai warna, nyaman digunakan, tinta tidak mudah macet.",
-        comments	: []
+        description	: "Tersedia dalam berbagai warna, nyaman digunakan, tinta tidak mudah macet."
     },
     {
         productName	: "Pensil",
@@ -32,8 +30,7 @@ var dataProduk = [
         category	: "Alat Tulis",
         stock		: 800,
         image		: "assets/pencil.jpg",
-        description	: "Pensil, tersedia dalam berbagai ketebalan, dari HB hingga B8",
-        comments	: []
+        description	: "Pensil, tersedia dalam berbagai ketebalan, dari HB hingga B8"
     }
 ]
 
@@ -47,9 +44,25 @@ function seedDB() {
         Product.create(seed, function(err, product){
             if (err) {
                 console.log(err)
+            } else {
+                Comment.create(
+                    {
+                        text: "This product is great!",
+                        author : 
+                        {
+                            username:"tester"
+                        }
+                    }, function (err, comment) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            product.comments.push(comment);
+                            product.save();
+                        }
+                });
             }
-        })
-    })
+        });
+    });
 }
 
 module.exports = seedDB;
