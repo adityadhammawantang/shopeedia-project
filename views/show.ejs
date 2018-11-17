@@ -14,70 +14,70 @@
 </head>
 
 <body>
-
-        <nav class="navbar navbar-default bg-light" style="z-index:2">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="/catalog">
-                        <img src="assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-                        Shopeedia
-                    </a>
-                    <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form>
-                    <% if (!currentUser) { %>
-                    <span class="navbar-text">
-                        <a href="/login">Login</a>
-                        <span>&nbsp;&nbsp;&nbsp;</span>
-                        <a href="/register">Sign Up</a>
-                    </span>
-                    <% } else { %>
-                    <span class="navbar-text">
-                        <% if (currentUser.username == "admin") { %>
-                        <a href="/dashboard"><strong>
-                                Dashboard</strong>
-                        </a>
-                        <% } else { %>
-                        <a href="/profile">
-                            Welcome, <strong>
-                                <%=currentUser.username%></strong>
-                        </a>
-                        <span>&nbsp;&nbsp;&nbsp;</span>
-                        <% } %>
-                        <% if (Array.isArray(currentUser.cart) && currentUser.cart.length ) { %>
-                            <a href="/checkout">
-                                 <strong> Checkout </strong>
-                            </a>
-                        <% } %>
-                        <span>&nbsp;&nbsp;&nbsp;</span>
-                        <a href="/logout">Logout</a>
-                    </span>
-                    <% } %>
-                </div>
-            </nav>
-        
-            <div class=container>
-                <% if (flashError && flashError.length > 0) { %>
-                <div class="alert alert-danger" role="alert">
-                    <%=flashError%>
-                </div>
-                <% } else if (flashSuccess && flashSuccess.length > 0) { %>
-                <div class="alert alert-success" role="alert">
-                    <%=flashSuccess%>
-                </div>
+    <nav class="navbar navbar-default bg-light" style="z-index:2">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/catalog">
+                <img src="assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                Shopeedia
+            </a>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <% if (!currentUser) { %>
+            <span class="navbar-text">
+                <a href="/login">Login</a>
+                <span>&nbsp;&nbsp;&nbsp;</span>
+                <a href="/register">Sign Up</a>
+            </span>
+            <% } else { %>
+            <span class="navbar-text">
+                <% if (currentUser.username == "admin") { %>
+                <a href="/dashboard"><strong>
+                        Dashboard</strong>
+                </a>
+                <% } else { %>
+                <a href="/profile">
+                    Welcome, <strong>
+                        <%=currentUser.username%></strong>
+                </a>
+                <span>&nbsp;&nbsp;&nbsp;</span>
                 <% } %>
-            </div>
+                <% if (Array.isArray(currentUser.cart) && currentUser.cart.length ) { %>
+                <a href="/checkout">
+                    <strong> Checkout </strong>
+                </a>
+                <% } %>
+                <span>&nbsp;&nbsp;&nbsp;</span>
+                <a href="/logout">Logout</a>
+            </span>
+            <% } %>
+        </div>
+    </nav>
+
+    <div class=container>
+        <% if (flashError && flashError.length > 0) { %>
+        <div class="alert alert-danger" role="alert">
+            <%=flashError%>
+        </div>
+        <% } else if (flashSuccess && flashSuccess.length > 0) { %>
+        <div class="alert alert-success" role="alert">
+            <%=flashSuccess%>
+        </div>
+        <% } %>
+    </div>
+
     <div class="container col-md-8">
         <div class="row">
             <div class="col-md-10">
-                    <img src="<%=product.image%>">
-                    <h3>
-                        <%=product.productName%>
-                    </h3>
+                <img src="<%=product.image%>">
+                <h3>
+                    <%=product.productName%>
+                </h3>
             </div>
         </div>
         <div class="row">
-            <div class="container col-md-8">
+            <div class="container col-md-9">
                 <hr>
                 <p>
                     <%=product.price%>
@@ -88,7 +88,7 @@
                 </p>
             </div>
 
-            <div class="container col-md-4">
+            <div class="container col-md-3">
                 <br>
                 <h5>Form Pembelian</h5>
                 <form action="/cart/<%=product._id%>" method="post">
@@ -102,14 +102,46 @@
                 </form>
             </div>
         </div>
+        <br>
+        <br>
+
         <div class="row">
-            <ul class="list-group-flush">
-                
-            </ul>
+            <div class="container col-md-12">
+                <h5>Ulasan Produk</h5>
+            </div>
+            <div class="container col-md-12">
+                <% if (currentUser) { %>
+                <form action="/catalog/<%=product._id%>/comments" method="post">
+                    <div class="form-inline">
+                        <input name="komentar" class="form-control" style="width: 50%; max-width: 100%" type="text" placeholder="Ketikkan ulasan kamu disini">
+                        <p>&nbsp;</p>
+                        <input class="form-control btn btn-primary" type="submit" placeholder="Kirim ulasan">
+                    </div>
+                </form>
+            </div>
+            <br>
+            <br>
+            <% } %>
+            <div class="container col-md-12">
+                <ul class="list-group-flush">
+                    <% product.comments.reverse(); %>
+                    <% product.comments.forEach(function(comment){ %>
+                    <li class="list-group-item">
+                        <blockquote class="blockquote mb-0" style="font-size:0.8rem">
+                            <p class="mb-1">
+                                <%=comment.text%>
+                            </p>
+                            <footer class="blockquote-footer">
+                                <%=comment.author.username%>
+                            </footer>
+                        </blockquote>
+                    </li>
+                    <% }) %>
+                </ul>
+            </div>
+
         </div>
     </div>
-
-
 
 </body>
 

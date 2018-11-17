@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/views"));
 app.set("view engine", "ejs");
 
-//mongoose.connect('mongodb://localhost/shopeedia')
+// mongoose.connect('mongodb://localhost/shopeedia')
 
 const databaseUri = 'mongodb://root:if3152@ds155663.mlab.com:55663/shopeedia-project' || 'mongodb://localhost/shopeedia';
 
@@ -117,9 +117,33 @@ app.get("/catalog", function (req, res) {
 
 app.get("/catalog/add", function (req, res) {
 	res.render("addProduct");
-})
+});
 
-//havent made the front-end yet
+app.post("/catalog/:id/comments", function(req, res){
+	Product.findById(req.params.id, function(err, product){
+		if (err) {
+			console.log(err)
+		} else {
+			Comment.create(
+				{
+					text: req.body.komentar,
+					author : 
+					{
+						username: req.user.username
+					}
+				}, function (err, comment) {
+					if (err) {
+						console.log(err);
+					} else {
+						product.comments.push(comment);
+						product.save();
+					}
+			});
+			res.redirect('back');
+		}
+	}); 
+});
+
 app.get("/catalog/:id", function (req, res) {
 	Product.findById(req.params.id).populate('comments').exec(function (err, theProduct) {
 		if (err) {
