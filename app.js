@@ -37,8 +37,8 @@ app.set("view engine", "ejs");
 const databaseUri = 'mongodb://root:if3152@ds155663.mlab.com:55663/shopeedia-project' || 'mongodb://localhost/shopeedia';
 
 mongoose.connect(databaseUri)
-    //   .then(() => console.log(`Database connected`))
-    //   .catch(err => console.log(`Database connection error: ${err.message}`));
+      .then(() => console.log(`Database connected`))
+      .catch(err => console.log(`Database connection error: ${err.message}`));
 
 app.use(function (req, res, next) {
 	res.locals.currentUser = req.user;
