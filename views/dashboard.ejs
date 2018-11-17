@@ -54,10 +54,10 @@
 
 	<div class="container-fluid col-md-10">
 		<div class="row">
-			
+
 			<div class="container col-md-2">
-					<br>
-					<br>
+				<br>
+				<br>
 				<a class="btn btn-primary" href="/catalog/add">+ Produk Baru</a>
 			</div>
 			<div class="container col-md-8">
@@ -66,12 +66,18 @@
 					<div class="card-header">
 						Ulasan Pembelian
 					</div>
-					<div class="card-body">
-						<blockquote class="blockquote mb-0">
-							<p>Barang-barangnya lengkap, saya suka</p>
-							<footer class="blockquote-footer">Rama,1998 tentang <cite title="Source Title">Macbook 2020</cite></footer>
+					<% comments.forEach(function(comment){ %>
+					<div class="card-body p-3" style="padding-top:0.5rem!important; padding-bottom:1rem!important; border-bottom:0.5px solid #EEE">
+						<blockquote class="blockquote mb-0"  style="font-size: 1rem;">
+							<p  style="margin-bottom: 0.5rem;">
+								<%=comment.text%>
+							</p>
+							<footer class="blockquote-footer">
+								<%=comment.author.username%><cite title="Source Title">
+									<%=comment.product%></cite></footer>
 						</blockquote>
 					</div>
+					<% }) %>
 				</div>
 			</div>
 		</div>

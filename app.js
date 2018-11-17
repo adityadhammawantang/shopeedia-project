@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/views"));
 app.set("view engine", "ejs");
 
-// mongoose.connect('mongodb://localhost/shopeedia')
+//mongoose.connect('mongodb://localhost/shopeedia')
 
 const databaseUri = 'mongodb://root:if3152@ds155663.mlab.com:55663/shopeedia-project' || 'mongodb://localhost/shopeedia';
 
@@ -130,7 +130,8 @@ app.post("/catalog/:id/comments", function(req, res){
 					author : 
 					{
 						username: req.user.username
-					}
+					},
+					product : product.productName
 				}, function (err, comment) {
 					if (err) {
 						console.log(err);
@@ -170,7 +171,14 @@ app.post("/catalog", isAdmin, function (req, res) {
 
 //ROUTES FOR ADMIN FUNCTIONS
 app.get("/dashboard", isAdmin, function (req, res) {
-	res.render("dashboard");
+	Comment.find({}, function (err, allComments) {
+		if (err) {
+			console.log(err);
+		} else {
+			allComments.reverse();
+			res.render("dashboard", { comments: allComments });
+		}
+	});
 });
 
 //END OF ADMIN FUNCTION
