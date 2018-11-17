@@ -8,10 +8,13 @@ var userSchema = new mongoose.Schema({
     address	: String,
     email	: String,
     phone   : String,
-    cart	: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref : "Cart"
-    }
+    cart	: [{
+        product : {
+            type: mongoose.Schema.Types.ObjectId,
+            ref : "Product"
+        },
+        quantity : Number
+    }]
 });
 
 userSchema.plugin(passportLocalMongoose);

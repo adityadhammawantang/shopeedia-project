@@ -155,64 +155,35 @@ app.post("/cart/:id", isLoggedIn, function (req, res) {
 		if (err) {
 			console.log(err);
 		} else {
-			if (theUser.cart) {
-				addingCart = []
-				Cart.findById(theUser.cart, function (err, theCart) {
-					if (err) {
-						console.log(err);
-					} else {
-						Cart.findById(theCart._id, function(err, userCart){
-							console.log(userCart);
-						});
-
-
-						// Cart.findById(theUser.cart).populate('product').exec(function (err, userCart) {
-						// 	if (err) {
-						// 		console.log(err)
-						// 	} else {
-						// 		console.log(theCart);
-						// 		console.log(userCart);
-						// 		userCart.forEach(function (cartProduct) {
-						// 			addingCart.push(cartProduct);
-						// 		});
-						// 		Cart.create(newCart, function(err, createdCart){
-						// 			if (err) {
-						// 				console.log(err);
-						// 			} else {
-						// 				console.log(createdCart);
-						// 				theUser.cart = createdCart._id;
-						// 				theUser.save();
-						// 				req.flash("flash-success", "Added successfully to your cart");
-						// 			}
-						// 		});
-						// 	}
-						// });
-					}
-				});
-			} else {
+			if (!Array.isArray(theUser.cart) || !theUser.cart.length) {
 				newCart = [{
 					product: req.params.id,
 					quantity: req.body.order.quantity
 				}];
-				console.log(req);
-				console.log(newCart);
-				Cart.create(newCart, function (err, createdCart) {
-					if (err) {
-						console.log(err);
-					} else {
-						console.log(createdCart);
-						theUser.cart = createdCart;
-						theUser.save();
-						req.flash("flash-success", "Added successfully to your cart");
-					}
-				});
+				theUser.cart = newCart;
+				theUser.save();
+				req.flash("flash-success", "Added successfully to your cart");
+				
+			} else {
+				addingCart = []
+				theUser.cart.forEach(function(previousCart){
+					addingCart.push(previousCart);
+				})
+				newCart = {
+					product: req.params.id,
+					quantity: req.body.order.quantity
+				};
+
+				addingCart.push(newCart);
+				theUser.cart = addingCart;
+				theUser.save();
+				req.flash("flash-success", "Added successfully to your cart");
 			}
 		}
 	})
 	res.redirect('back');
 });
 //END OF PROFILE, CART, AND HISTORY
-
 
 //FUNCTIONS
 function isLoggedIn(req, res, next) {
