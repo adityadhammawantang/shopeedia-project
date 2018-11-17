@@ -20,7 +20,7 @@
 <body>
 	<!Navigasi untuk homepage>
 
-	<nav class="navbar navbar-default bg-light" style="z-index:1">
+	<nav class="navbar navbar-default bg-light" style="z-index:2">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="/catalog">
 				<img src="assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -69,9 +69,7 @@
 
 
 	<div class="container col-8">
-		<h1><span class="badge badge-secondary">HOT Products</span></h1>
 		<br>
-
 		<div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
 			<div class="carousel-inner">
 				<div class="carousel-item active">
@@ -94,7 +92,8 @@
 			</a>
 		</div>
 		<br>
-		<h1><span class="badge badge-secondary">New Products</span></h1>
+		<h1><span class="badge badge-primary">New Products</span></h1>
+		<br>
 		<div class="card-deck">
 			<!-- <div class="row"> -->
 			<% products.forEach(function(product){ %>
@@ -120,7 +119,8 @@
 		</div>
 		<div class="container bg-light">
 			<br>
-			<span class="navbar-brand mb-0 h1">Kategori</span>
+			<h3>Kategori</h3>
+			<br>
 		</div>
 		<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
 			<div class="carousel-inner">
@@ -134,7 +134,7 @@
 		</div>
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-6">
+				<div class="col-6" style="background-color:white">
 					<div class="list-group">
 						<a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
 						<a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
@@ -142,7 +142,7 @@
 						<a href="#" class="list-group-item list-group-item-action disabled">Vestibulum at eros</a>
 					</div>
 				</div>
-				<div class="col-6">
+				<div class="col-6" style="background-color:white">
 					<div class="list-group">
 						<a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
 						<a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
@@ -150,6 +150,43 @@
 						<a href="#" class="list-group-item list-group-item-action disabled">Vestibulum at eros</a>
 					</div>
 				</div>
+			</div>
+		</div>
+		<span><br><br></span>
+		<div class="container-fluid footer" style="background-color:white">
+			<div class="row">
+				<div class="col-md-4">
+					<h6 style="padding: 5px; margin: 5px 0 5px 0;">
+						Shopeedia
+					</h6>
+					<ul class="list-group-flush">
+						<li class="list-group-item"><a href="#">Tentang Kami</a></li>
+						<li class="list-group-item"><a href="#">Blog</a></li>
+						<li class="list-group-item"><a href="#">FAQS</a></li>
+					</ul>
+				</div>
+				<div class="col-md-4">
+					<h6 style="padding: 5px; margin: 5px 0 5px 0;">
+						Petunjuk
+					</h6>
+					<ul class="list-group-flush">
+						<li class="list-group-item"><a href="#">Cara Membeli</a></li>
+						<li class="list-group-item"><a href="#">Ketentuan</a></li>
+						<li class="list-group-item"><a href="#">Pembayaran</a></li>
+						<li class="list-group-item"><a href="#">Pengiriman</a></li>
+					</ul>
+				</div>
+				<div class="col-md-4">
+						<h6 style="padding: 5px; margin: 5px 0 5px 0;">
+							Bantuan
+						</h6>
+						<ul class="list-group-flush">
+							<li class="list-group-item"><a href="#">Hubungi Kami</a></li>
+							<li class="list-group-item"><a href="#">Syarat dan Ketentuan</a></li>
+							<li class="list-group-item"><a href="#">Kebijakan Privasi</a></li>
+							<li class="list-group-item"><a href="#">Panduan Keamanan</a></li>
+						</ul>
+					</div>
 			</div>
 		</div>
 	</div>

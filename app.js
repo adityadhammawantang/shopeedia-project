@@ -11,9 +11,9 @@ var express = require('express'),
 
 var Comment = require('./models/comment'),
 	Product = require('./models/product'),
+	Cart = require('./models/cart'),
 	Transaction = require('./models/transaction'),
-	User = require('./models/user'),
-	Cart = require('./models/cart');
+	User = require('./models/user');
 
 //MIDDLEWARES
 app.use(require("express-session")({
@@ -43,7 +43,7 @@ app.use(function (req, res, next) {
 //END OF MIDDLEWARES
 
 //INDEX PAGE
-seedDB();
+//seedDB();
 
 app.get("/", function (req, res) {
 	res.redirect("/catalog");
@@ -116,18 +116,18 @@ app.get("/catalog/:id", function (req, res) {
 		if (err) {
 			console.log("An error has occured");
 		} else {
-			res.render("catalog/show", { product: theProduct });
+			res.render("show", { product: theProduct });
 		}
 	});
 });
 
-app.get("/addProduct", function(req, res){
+app.get("/addProduct", function (req, res) {
 	res.render("addProduct");
 })
 
 app.post("/catalog", isAdmin, function (req, res) {
-	var newProduct = req.params.product;
-	Product.create(newProduct, function(err, newlyCreated){
+	var newProduct = req.body.product;
+	Product.create(newProduct, function (err, newlyCreated) {
 		if (err) {
 			console.log(err);
 		} else {
@@ -151,25 +151,59 @@ app.get("/cart", isLoggedIn, function (req, res) {
 });
 
 app.post("/cart/:id", isLoggedIn, function (req, res) {
-	User.findById(currentUser._id, function (err, theUser) {
+	User.findById(req.user._id, function (err, theUser) {
 		if (err) {
 			console.log(err);
 		} else {
-			if (currentUser.cart) {
+			if (theUser.cart) {
 				addingCart = []
-				currentUser.cart.forEach(function (cartProduct) {
-					addingCart.push(cartProduct);
-				});
-				theUser.cart = addingCart;
-				theUser.save();
-			} else {
-				newCart = { product: req.params.id, quantity: 1 };
-				Cart.create(newCart, function (err, cart) {
+				Cart.findById(theUser.cart, function (err, theCart) {
 					if (err) {
 						console.log(err);
 					} else {
-						theUser.cart = newCart;
+						Cart.findById(theCart._id, function(err, userCart){
+							console.log(userCart);
+						});
+
+
+						// Cart.findById(theUser.cart).populate('product').exec(function (err, userCart) {
+						// 	if (err) {
+						// 		console.log(err)
+						// 	} else {
+						// 		console.log(theCart);
+						// 		console.log(userCart);
+						// 		userCart.forEach(function (cartProduct) {
+						// 			addingCart.push(cartProduct);
+						// 		});
+						// 		Cart.create(newCart, function(err, createdCart){
+						// 			if (err) {
+						// 				console.log(err);
+						// 			} else {
+						// 				console.log(createdCart);
+						// 				theUser.cart = createdCart._id;
+						// 				theUser.save();
+						// 				req.flash("flash-success", "Added successfully to your cart");
+						// 			}
+						// 		});
+						// 	}
+						// });
+					}
+				});
+			} else {
+				newCart = [{
+					product: req.params.id,
+					quantity: req.body.order.quantity
+				}];
+				console.log(req);
+				console.log(newCart);
+				Cart.create(newCart, function (err, createdCart) {
+					if (err) {
+						console.log(err);
+					} else {
+						console.log(createdCart);
+						theUser.cart = createdCart;
 						theUser.save();
+						req.flash("flash-success", "Added successfully to your cart");
 					}
 				});
 			}
@@ -196,7 +230,7 @@ function isAdmin(req, res, next) {
 		} else {
 			req.flash("flash-error", "You are not permitted to do this");
 			res.redirect("/login");
-			return ;
+			return;
 		}
 	}
 	req.flash("flash-error", "Please Login First");

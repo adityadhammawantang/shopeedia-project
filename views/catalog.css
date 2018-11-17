@@ -75,14 +75,23 @@
         width: 50%;
     }
 
+
+    #carouselExampleFade:hover {
+        box-shadow: 3px 3px 10px #9F9F9F;
+        transform: scale(1.02);
+        z-index:1;
+        transition: all 0.15s; 
+    }
     .card {
-        max-height: 400px;
+        height: 380px;
+        border: 0;
+        margin: 0;
     }
 
     .product-card {
-        padding: 7px;
         background-color: #FCFCFC;
         border : 0;
+        padding: 0;
     }
 
     .product-card:hover {
@@ -90,6 +99,7 @@
         transform: scale(1.02);
         z-index:1;
         transition: all 0.15s;
+        padding:0;
     }
 
     .card-subtitle {
@@ -102,8 +112,28 @@
         font-size: 0.7rem;
         padding: 10px 0 0 0;
         line-height:1em;
-        height:3em;
         overflow:hidden;
         white-space: nowrap;
         text-overflow:ellipsis;
+    }
+
+    .footer {
+        font-size: 0.6rem;
+        border-top: 0.5px solid #eee 
+    }
+
+    .list-group-item {
+        padding : 10px 6px
+    }
+
+    .list-group-flush{
+        padding : 3px
+    }
+
+    .list-group-flush > .list-group-item {
+        padding: 4px;
+    }
+
+    .list-group-item > a {
+        color: black;
     }
