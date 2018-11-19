@@ -60,16 +60,6 @@ app.get("/register", function (req, res) {
 	res.render("register");
 });
 
-app.get("/profile", isLoggedIn, function (req, res) {
-	User.findById(req.user._id, function (err, theUser) {
-		if (err) {
-			console.log(err);
-		} else {
-			res.render("profile", { user: theUser });
-		}
-	});
-});
-
 app.post("/register", function (req, res) {
 	User.register(new User({ username: req.body.username, name: req.body.name, address: req.body.address, email: req.body.email, phone: req.body.phone }), req.body.password, function (err, user) {
 		if (err) {
@@ -119,19 +109,19 @@ app.get("/catalog/add", function (req, res) {
 	res.render("addProduct");
 });
 
-app.post("/catalog/:id/comments", function(req, res){
-	Product.findById(req.params.id, function(err, product){
+app.post("/catalog/:id/comments", function (req, res) {
+	Product.findById(req.params.id, function (err, product) {
 		if (err) {
 			console.log(err)
 		} else {
 			Comment.create(
 				{
 					text: req.body.komentar,
-					author : 
+					author:
 					{
 						username: req.user.username
 					},
-					product : product.productName
+					product: product.productName
 				}, function (err, comment) {
 					if (err) {
 						console.log(err);
@@ -139,10 +129,10 @@ app.post("/catalog/:id/comments", function(req, res){
 						product.comments.push(comment);
 						product.save();
 					}
-			});
+				});
 			res.redirect('back');
 		}
-	}); 
+	});
 });
 
 app.get("/catalog/:id", function (req, res) {
@@ -228,7 +218,7 @@ app.post("/checkout", function (req, res) {
 		date1: new Date()
 	}
 
-	//var date = timestamp.getDate() + "-" + (timestamp.getMonth()+1) + "-" + timestamp.timestamp.getFullYear()
+//var date = timestamp.getDate() + "-" + (timestamp.getMonth()+1) + "-" + timestamp.timestamp.getFullYear()
 	Transaction.create(newTransaction, function (err, newT) {
 		if (err) {
 			console.log(err);
@@ -236,9 +226,8 @@ app.post("/checkout", function (req, res) {
 			User.findById(req.user._id, function (err, theUser) {
 				theUser.cart = [];
 				theUser.save();
-				console.log(theUser);
 			});
-			res.render("shipment", { transaction: newT });
+			res.redirect("/status/" + newT._id);
 		}
 	});
 
@@ -246,8 +235,36 @@ app.post("/checkout", function (req, res) {
 
 //ROUTES FOR PROFILE, CART, AND HISTORY
 
+app.get("/profile", isLoggedIn, function (req, res) {
+	User.findById(req.user._id, function (err, theUser) {
+		if (err) {
+			console.log(err);
+		} else {
+			Transaction.find({ user: req.user._id }, function (err, userTransactions) {
+				if (err) {
+					console.log(err);
+				} else {
+					res.render("profile", { user: theUser, transactions: userTransactions});
+				}
+			});
+		}
+	});
+});
+
 app.get("/cart", isLoggedIn, function (req, res) {
-	res.render("cart");
+	User.findById(req.user._id, function (err, theUser) {
+		if (err) {
+			console.log(err);
+		} else {
+			if (!Array.isArray(theUser.cart) || !theUser.cart.length) {
+				res.redirect('back');
+				req.flash("flash-error", "Tidak ada belanjaan");
+			} else {
+				theUser.cart.reverse();
+				res.render('cart', { cart: theUser.cart });
+			}
+		}
+	});
 });
 
 app.post("/cart/:id", isLoggedIn, function (req, res) {
@@ -282,6 +299,16 @@ app.post("/cart/:id", isLoggedIn, function (req, res) {
 		}
 	})
 	res.redirect('back');
+});
+
+app.get("/status/:id", function (req, res) {
+	Transaction.findById(req.params.id, function (err, theTransaction){
+		if (err) {
+			console.log(err);
+		} else {
+			res.render("shipment", {transaction: theTransaction});
+		}
+	});
 });
 //END OF PROFILE, CART, AND HISTORY
 
