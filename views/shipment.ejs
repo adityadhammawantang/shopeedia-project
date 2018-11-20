@@ -12,7 +12,6 @@
 	 crossorigin="anonymous">
 
 	<title>Pengiriman</title>
-	<link rel="shortcut icon" href=favicon.ico />
 </head>
 
 <body>
@@ -52,59 +51,94 @@
 		</div>
 	</nav>
 
-	<h1><span class="badge badge-primary">Status Pengiriman: <span class="badge badge-secondary"><%=transaction._id%></span></span></h1>
+	<div class="col">
+		<h1><span class="badge badge-primary">Status Pengiriman: <span class="badge badge-secondary">
+					<%=transaction._id%></span></span></h1>
 
-	<!-- Progress bar untuk status pesanan -->
-	<div class="container">
-		<ul class="progressbar">
-			<% if (transaction.status == "confirmed" || transaction.status == "paid" || transaction.status == "sent" ||transaction.status == "received" ) { %>
+		<!-- Progress bar untuk status pesanan -->
+		<div class="container">
+			<ul class="progressbar">
+				<% if (transaction.status == "confirmed" || transaction.status == "paid" || transaction.status == "sent" ||transaction.status == "received" ) { %>
 				<li class="active">
-			<% } else { %>
+					<% } else { %>
 				<li>
-			<% } %>
-				<h5> Pesanan Dibuat </h5>
-				<p> #tanggal #waktu </p>
-			</li>
+					<% } %>
+					<h5> Pesanan Dibuat </h5>
+					<p>
+						<%=transaction.dateConfirmed %>
+					</p>
+				</li>
 
-			<% if (transaction.status == "paid" || transaction.status == "sent") { %>
+				<% if (transaction.status == "paid" || transaction.status == "sent" || transaction.status == "received") { %>
 				<li class="active">
-			<% } else { %>
+					<% } else { %>
 				<li>
-			<% } %>
-				<h5> Pesanan Dibayarkan </h5>
-				<p> #tanggal #waktu </p>
-			</li>
+					<% } %>
+					<h5> Pesanan Dibayarkan </h5>
+					<p>
+						<%=transaction.datePaid %>
+					</p>
+				</li>
 
-			<% if (transaction.status == "sent" || transaction.status == "received" ) { %>
+				<% if (transaction.status == "sent" || transaction.status == "received" ) { %>
 				<li class="active">
-			<% } else { %>
+					<% } else { %>
 				<li>
-			<% } %>
-				<h5> Pesanan Dikirimkan </h5>
-				<p> #tanggal #waktu </p>
-			</li>
-			<% if (transaction.status == "received") { %>
+					<% } %>
+					<h5> Pesanan Dikirimkan </h5>
+					<p>
+						<%=transaction.dateSent %>
+					</p>
+				</li>
+				<% if (transaction.status == "received") { %>
 				<li class="active">
-			<% } else { %>
+					<% } else { %>
 				<li>
-			<% } %>
-				<h5> Pesanan Dikirimkan </h5>
-				<p> #tanggal #waktu </p>
-			</li>
-		</ul>
+					<% } %>
+					<h5> Pesanan Diterima </h5>
+					<p>
+						<%=transaction.dateReceived %>
+					</p>
+				</li>
+			</ul>
+		</div>
+		<% if (transaction.status == "sent") { %>
+		<!-- "disabled" dihapus saat status "Pesanan Dikirimkan" -->
+		<form action ="/status/<%=transaction._id%>" method="post"> 
+			<button class="btn btn-lg btn-primary btn-success acceptbtn" name="received" value="received">Pesanan Diterima</button>
+		</form>
+		<% } else { %>
+		
+		<% } %>
+		
+
+		<!-- Paragraf -->
+		<div class="mt-4">
+			<p class="article">
+				<% if (transaction.status == "confirmed" ) { %>
+				<p>Terimakasih sudah memesan produk kami! Harap segera membayarkan pembelian anda melalui:
+					<div class="container bg-info text-light">
+						<p lead>Bank ZXC a.n. Shopeedia</p>
+						<p>Nomor Rekening : 0192837465</p>
+					</div>
+					<p> Bila sudah, silakan konfirmasi pembayaran ke nomor WA kami : 0888 2222 5555 1111</p>
+					<p> Terimakasih banyak!</p>
+				</p>
+
+				<% } else if (transaction.status == "paid") { %>
+				<p>Petugas kami sudah mengkonfirmasi pembayaran anda, mohon tunggu beberapa waktu untuk kami mengirimkan produk
+					anda!</p>
+
+				<% } else if (transaction.status == "sent") { %>
+				<p>Produk anda sedang kami kirimkan! Mohon dengan sabar menunggu produk agar sampai ke tempat anda</p>
+
+				<% } else if (transaction.status == "received") { %>
+				<p>Terimakasih telah berbelanja dengan kami! </p>
+				<% } %>
+			</p>
+		</div>
 	</div>
 
-	<!-- "disabled" dihapus saat status "Pesanan Dikirimkan" -->
-	<button type="button" class="btn btn-lg btn-primary btn-success acceptbtn" disabled>Pesanan Diterima</button>
-
-	<!-- Paragraf -->
-	<p class="article">
-		Penjual telah mengirimkan pesanan. Produk akan sampai sebelum tanggal <type="date"> 24-11-2018 </type>
-			<br>
-			<br>
-			Jika anda belum menerima produk sebelum <type="date"> 24-11-2018 </type>, silahkan mengajukan pengembalian barang
-				melalui form keluhan kami. Terima kasih.
-	</p>
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 	 crossorigin="anonymous"></script>

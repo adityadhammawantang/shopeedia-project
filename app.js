@@ -33,9 +33,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/views"));
 app.set("view engine", "ejs");
 
-//mongoose.connect('mongodb://localhost/shopeedia')
 
-const databaseUri = 'mongodb://root:if3152@ds155663.mlab.com:55663/shopeedia-project' || 'mongodb://localhost/shopeedia';
+const databaseUri = process.env.SHOPEEDIA_MONGODBURI || 'mongodb://localhost/shopeedia';
 
 mongoose.connect(databaseUri)
       .then(() => console.log(`Database connected`))
@@ -75,9 +74,9 @@ app.post("/register", function (req, res) {
 
 app.get("/login", function (req, res) {
 	if (req.isAuthenticated()) {
-		res.redirect("/catalog")
+		res.redirect("/catalog");
 	} else {
-		res.render("login")
+		res.render("login");
 	}
 });
 
@@ -89,7 +88,7 @@ app.post("/login", passport.authenticate("local", {
 
 app.get("/logout", function (req, res) {
 	req.logout();
-	req.flash("flash-success", "Successfully logout");
+	req.flash("flash-success", "Berhasil logout");
 	res.redirect("/login");
 });
 
@@ -97,25 +96,36 @@ app.get("/logout", function (req, res) {
 
 //ROUTES FOR PRODUCTS AND CATALOG
 app.get("/catalog", function (req, res) {
-	Product.find({}, function (err, allProducts) {
-		if (err) {
-			console.log(err);
-		} else {
-			res.render("catalog", { products: allProducts });
-		}
-	});
+	var get=req.query.q;
+	if (get) {
+		Product.find({productName: new RegExp(get, "i")}, function (err, searchedProducts) {
+			if (err) {
+				console.log("err");
+			} else {
+				res.render("catalog", { products: searchedProducts });
+			}
+		});
+	} else {
+		Product.find({}, function (err, allProducts) {
+			if (err) {
+				console.log(err);
+			} else {
+				res.render("catalog", { products: allProducts });
+			}
+		});
+	}
 });
 
-app.get("/catalog/add", function (req, res) {
+app.get("/catalog/add", isAdmin, function (req, res) {
 	res.render("addProduct");
 });
 
-app.get("/catalog/:id/edit", function (req, res) {
-	Product.findById(req.params.id, function(err, product){
+app.get("/catalog/:id/edit", isAdmin, function (req, res) {
+	Product.findById(req.params.id, function (err, product) {
 		if (err) {
 			console.log(err);
 		} else {
-			res.render("editProduct", {product: product});
+			res.render("editProduct", { product: product });
 		}
 	})
 });
@@ -168,29 +178,29 @@ app.post("/catalog", isAdmin, function (req, res) {
 });
 
 app.put("/catalog/:id", isAdmin, function (req, res) {
-	Product.findByIdAndUpdate(req.params.id, req.body.product, function(err, updatedProduct) {
+	Product.findByIdAndUpdate(req.params.id, req.body.product, function (err, updatedProduct) {
 		if (err) {
 			console.log(err);
 			res.redirect("/catalog");
 		} else {
 			res.redirect("/catalog/" + req.params.id);
-			
+
 		}
-	}); 
- });
+	});
+});
 
 app.delete("/catalog/:id", isAdmin, function (req, res) {
-	Product.findByIdAndDelete(req.params.id, function(err, updatedProduct) {
+	Product.findByIdAndDelete(req.params.id, function (err, updatedProduct) {
 		if (err) {
 			console.log(err);
 			res.redirect("back");
 		} else {
 			res.redirect("/catalog");
-			
+
 		}
-	}); 
- });
- 
+	});
+});
+
 
 //END OF PRODUCTS AND CATALOGS
 
@@ -200,8 +210,15 @@ app.get("/dashboard", isAdmin, function (req, res) {
 		if (err) {
 			console.log(err);
 		} else {
-			allComments.reverse();
-			res.render("dashboard", { comments: allComments });
+			Transaction.find({}).populate('user').exec(function (err, allTransactions){
+				if (err) {
+					console.log(err);
+				} else {
+					allComments.reverse();
+					allTransactions.reverse()
+					res.render("dashboard", { transactions: allTransactions, comments: allComments });
+				}	
+			});
 		}
 	});
 });
@@ -246,14 +263,13 @@ app.get("/checkout", function (req, res) {
 });
 
 app.post("/checkout", function (req, res) {
+
 	var newTransaction = {
 		user: req.user._id,
 		status: "confirmed",
 		sum: req.body.sum,
-		date1: new Date()
+		dateConfirmed: new Date().toISOString().replace('T', ' ').substr(0, 19)
 	}
-
-//var date = timestamp.getDate() + "-" + (timestamp.getMonth()+1) + "-" + timestamp.timestamp.getFullYear()
 	Transaction.create(newTransaction, function (err, newT) {
 		if (err) {
 			console.log(err);
@@ -262,7 +278,7 @@ app.post("/checkout", function (req, res) {
 				theUser.cart = [];
 				theUser.save();
 			});
-			
+
 			res.redirect("/status/" + newT._id);
 		}
 	});
@@ -280,7 +296,7 @@ app.get("/profile", isLoggedIn, function (req, res) {
 				if (err) {
 					console.log(err);
 				} else {
-					res.render("profile", { user: theUser, transactions: userTransactions});
+					res.render("profile", { user: theUser, transactions: userTransactions });
 				}
 			});
 		}
@@ -308,11 +324,11 @@ app.post("/cart/:id", isLoggedIn, function (req, res) {
 		if (err) {
 			console.log(err);
 		} else {
-			Product.findById(req.params.id, function(err, product){
+			Product.findById(req.params.id, function (err, product) {
 				if (err) {
 					console.log(err);
 				} else {
-					if (product.stock-req.body.order.quantity >= 0) {
+					if (product.stock - req.body.order.quantity >= 0) {
 						product.stock -= req.body.order.quantity;
 						product.save();
 					} else {
@@ -352,11 +368,36 @@ app.post("/cart/:id", isLoggedIn, function (req, res) {
 });
 
 app.get("/status/:id", function (req, res) {
-	Transaction.findById(req.params.id, function (err, theTransaction){
+	Transaction.findById(req.params.id, function (err, theTransaction) {
 		if (err) {
 			console.log(err);
 		} else {
-			res.render("shipment", {transaction: theTransaction});
+			res.render("shipment", { transaction: theTransaction });
+		}
+	});
+});
+
+app.post("/status/:id", function (req, res) {
+	Transaction.findById(req.params.id, function (err, theTransaction) {
+		if (err) {
+			console.log(err);
+		} else {
+			if (req.body.paid) {
+				theTransaction.status = "paid";
+				theTransaction.datePaid = new Date().toISOString().replace('T', ' ').substr(0, 19);
+				theTransaction.save();
+				res.redirect('back');
+			} else if (req.body.sent) {
+				theTransaction.status = "sent";
+				theTransaction.dateSent = new Date().toISOString().replace('T', ' ').substr(0, 19);
+				theTransaction.save();
+				res.redirect('back');
+			} else if (req.body.received) {
+				theTransaction.status = "received";
+				theTransaction.dateReceived = new Date().toISOString().replace('T', ' ').substr(0, 19);
+				theTransaction.save();
+				res.redirect("status" + theTransaction._id);
+			}
 		}
 	});
 });
@@ -385,6 +426,6 @@ function isAdmin(req, res, next) {
 	res.redirect("/login");
 }
 
-app.listen(process.env.PORT, function (req, res) {
+app.listen((process.env.PORT || 3152), function (req, res) {
 	console.log("Shopeedia server is up and running!");
 });

@@ -100,7 +100,8 @@
 
             <div class="container col-md-3">
                 <br>
-                <% if (currentUser.username == "admin") { %>
+                <% if (!currentUser) { %> 
+                <% } else if (currentUser.username == "admin") { %>
                 <div class="row">
                     <div class="col">
                         <a href="/catalog/<%=product._id%>/edit" class="btn btn-warning btn-xs">Ubah</a>
@@ -111,7 +112,6 @@
                         </form>
                     </div>
                 </div>
-                <% } else if (!currentUser) { %>
                 <% } else { %>
                 <h5>Form Pembelian</h5>
                 <form action="/cart/<%=product._id%>" method="post">
