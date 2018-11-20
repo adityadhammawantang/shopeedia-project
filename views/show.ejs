@@ -78,11 +78,21 @@
         </div>
         <div class="row">
             <div class="container col-md-9">
-                <hr>
-                <p>
-                    <%=product.price%>
-                </p>
-                <br>
+                <div class="row">
+                    <div class="col">
+
+                        <p>
+                            <%=product.price%>
+                        </p>
+                    </div>
+                    <div class="col">
+
+                        <p>
+                            Masih tersedia:
+                            <%=product.stock%>
+                        </p>
+                    </div>
+                </div>
                 <p>
                     <%=product.description%>
                 </p>
@@ -90,6 +100,19 @@
 
             <div class="container col-md-3">
                 <br>
+                <% if (currentUser.username == "admin") { %>
+                <div class="row">
+                    <div class="col">
+                        <a href="/catalog/<%=product._id%>/edit" class="btn btn-warning btn-xs">Ubah</a>
+                    </div>
+                    <div class="col">
+                            <form action="/catalog/<%=product._id%>?_method=DELETE" method="POST">
+                            <input type="submit" class="btn btn-danger btn-xs" value="Hapus">
+                        </form>
+                    </div>
+                </div>
+                <% } else if (!currentUser) { %>
+                <% } else { %>
                 <h5>Form Pembelian</h5>
                 <form action="/cart/<%=product._id%>" method="post">
                     <div class="form-group">
@@ -100,6 +123,7 @@
                         <input class="btn btn-primary btn-sm" type="submit" value="Pesan">
                     </div>
                 </form>
+                <% } %>
             </div>
         </div>
         <br>
@@ -113,7 +137,8 @@
                 <% if (currentUser) { %>
                 <form action="/catalog/<%=product._id%>/comments" method="post">
                     <div class="form-inline">
-                        <input name="komentar" class="form-control" style="width: 50%; max-width: 100%" type="text" placeholder="Ketikkan ulasan kamu disini">
+                        <input name="komentar" class="form-control" style="width: 50%; max-width: 100%" type="text"
+                            placeholder="Ketikkan ulasan kamu disini">
                         <p>&nbsp;</p>
                         <input class="form-control btn btn-primary" type="submit" placeholder="Kirim ulasan">
                     </div>

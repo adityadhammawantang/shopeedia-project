@@ -53,31 +53,34 @@
 		<% } %>
 	</div>
 
-	<form action="/catalog" method="post">
+    <form action="/catalog/<%=product._id%>?_method=PUT" method="POST">
 		<div class="imgcontainer">
 			<img src="./assets/logo.png" alt="Avatar" class="avatar">
 		</div>
 
 		<div class="container col-4">
 			<label class="biru" for="product[productName]"><b>Nama Produk</b></label>
-			<input type="text" placeholder="Nama Produk" name="product[productName]" required>
-
+			<input type="text" value="<%=product.productName%>" name="product[productName]" readonly>
 			<label class="biru" for="product[price]"><b>Harga</b></label>
-			<input type="text" placeholder="Harga" name="product[price]" required>
-
+			<input type="text" value="<%=product.price%>" name="product[price]" required>
 			<label class="biru" for="product[discount]"><b>Diskon</b></label>
-			<input type="text" placeholder="Harga" name="product[discount]">
-
+			<input type="text" value="<%=product.discount%>" name="product[discount]">
 			<label class="biru" for="product[category]"><b>Kategori</b></label>
-			<input type="text" placeholder="Kategori" name="product[category]" required>
+			<input type="text" value="<%=product.category%>" name="product[category]" required>
 			<label class="biru" for="product[stock]"><b>Jumlah Tersedia</b></label>
-			<input type="text" placeholder="Jumlah tersedia" name="product[stock]" required>
+			<input type="text" value="<%=product.stock%>" name="product[stock]" required>
 			<label class="biru" for="product[image]"><b>Tautan gambar</b></label>
-			<input type="text" placeholder="Gambar" name="product[image]" required>
+			<input type="text" value="<%=product.image%>" name="product[image]" required>
 			<label class="biru" for="product[description]"><b>Deskripsi Produk</b></label>
-			<input type="text" placeholder="Deskripsi Produk" name="product[description]" required>
-
-			<button class="button" type="submit"><strong>Tambahkan</strong></button>
+            <input type="text" value="<%=product.description%>" name="product[description]"required>
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-primary" type="submit"><strong>Ubah</strong></button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-danger" type="submit"><strong>Hapus</strong></button>
+                </div>
+            </div>
 
 		</div>
 		</div>

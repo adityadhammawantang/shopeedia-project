@@ -18,7 +18,7 @@ var Comment = require('./models/comment'),
 app.use(require("express-session")({
 	secret: "Tugas IF3152 - Rekayasa Perangkat Lunak",
 	resave: false,
-	saveUninitalized: false
+	saveUninitialized: false
 }));
 
 app.use(passport.initialize());
@@ -28,6 +28,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use(flash());
+app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/views"));
 app.set("view engine", "ejs");
@@ -109,6 +110,16 @@ app.get("/catalog/add", function (req, res) {
 	res.render("addProduct");
 });
 
+app.get("/catalog/:id/edit", function (req, res) {
+	Product.findById(req.params.id, function(err, product){
+		if (err) {
+			console.log(err);
+		} else {
+			res.render("editProduct", {product: product});
+		}
+	})
+});
+
 app.post("/catalog/:id/comments", function (req, res) {
 	Product.findById(req.params.id, function (err, product) {
 		if (err) {
@@ -138,13 +149,12 @@ app.post("/catalog/:id/comments", function (req, res) {
 app.get("/catalog/:id", function (req, res) {
 	Product.findById(req.params.id).populate('comments').exec(function (err, theProduct) {
 		if (err) {
-			console.log("An error has occured");
+			console.log(err);
 		} else {
 			res.render("show", { product: theProduct });
 		}
 	});
 });
-
 
 app.post("/catalog", isAdmin, function (req, res) {
 	var newProduct = req.body.product;
@@ -156,6 +166,31 @@ app.post("/catalog", isAdmin, function (req, res) {
 		}
 	})
 });
+
+app.put("/catalog/:id", isAdmin, function (req, res) {
+	Product.findByIdAndUpdate(req.params.id, req.body.product, function(err, updatedProduct) {
+		if (err) {
+			console.log(err);
+			res.redirect("/catalog");
+		} else {
+			res.redirect("/catalog/" + req.params.id);
+			
+		}
+	}); 
+ });
+
+app.delete("/catalog/:id", isAdmin, function (req, res) {
+	Product.findByIdAndDelete(req.params.id, function(err, updatedProduct) {
+		if (err) {
+			console.log(err);
+			res.redirect("back");
+		} else {
+			res.redirect("/catalog");
+			
+		}
+	}); 
+ });
+ 
 
 //END OF PRODUCTS AND CATALOGS
 
@@ -227,6 +262,7 @@ app.post("/checkout", function (req, res) {
 				theUser.cart = [];
 				theUser.save();
 			});
+			
 			res.redirect("/status/" + newT._id);
 		}
 	});
@@ -272,6 +308,19 @@ app.post("/cart/:id", isLoggedIn, function (req, res) {
 		if (err) {
 			console.log(err);
 		} else {
+			Product.findById(req.params.id, function(err, product){
+				if (err) {
+					console.log(err);
+				} else {
+					if (product.stock-req.body.order.quantity >= 0) {
+						product.stock -= req.body.order.quantity;
+						product.save();
+					} else {
+						res.redirect('back');
+						return
+					}
+				}
+			});
 			if (!Array.isArray(theUser.cart) || !theUser.cart.length) {
 				newCart = [{
 					product: req.params.id,
@@ -279,7 +328,7 @@ app.post("/cart/:id", isLoggedIn, function (req, res) {
 				}];
 				theUser.cart = newCart;
 				theUser.save();
-				req.flash("flash-success", "Added successfully to your cart");
+				req.flash("flash-success", "Berhasil ditambahkan ke keranjang belanja");
 
 			} else {
 				addingCart = []
@@ -294,8 +343,9 @@ app.post("/cart/:id", isLoggedIn, function (req, res) {
 				addingCart.push(newCart);
 				theUser.cart = addingCart;
 				theUser.save();
-				req.flash("flash-success", "Added successfully to your cart");
+				req.flash("flash-success", "Berhasil ditambahkan ke keranjang belanja");
 			}
+
 		}
 	})
 	res.redirect('back');
