@@ -28,7 +28,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use(flash());
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/views"));
 app.set("view engine", "ejs");
@@ -77,12 +77,15 @@ app.get("/login", function (req, res) {
 		res.redirect("/catalog");
 	} else {
 		res.render("login");
+		req.flash('flash-error', "Salah username atau password, silakan coba lagi");
 	}
 });
 
 app.post("/login", passport.authenticate("local", {
 	successRedirect: "/catalog",
-	failureRedirect: "/login"
+	failureRedirect: "/login",
+	failureFlash: 'Invalid username or password',
+	successFlash: true
 }), function (req, res) {
 });
 
@@ -246,7 +249,7 @@ app.get("/checkout", function (req, res) {
 							var p = {
 								productName: cartProduct.productName,
 								quantity: cartItem.quantity,
-								sub: cartProduct.price * cartItem.quantity
+								sub: (cartProduct.price - (cartProduct.price* cartProduct.discount / 100))  * cartItem.quantity
 							}
 							productList.push(p);
 							subtotal += cartProduct.price * cartItem.quantity;

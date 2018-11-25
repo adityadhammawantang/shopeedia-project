@@ -1,15 +1,7 @@
 #shopeedia-project
 ==================
 
-Shopeedia adalah sebuah website e-commerce yang ditujukan untuk memenuhi spesifikasi tugas besar mata kuliah rekayasa perangkat lunak.  
-
-Struktur / hirarki folder:
-models -> berisi struktur data
-views -> berisi tampilan
-public -> berisi tampilan umum, seperti main.css dan main.js
-views/partials -> berisi template untuk header dan footer (header.ejs) dan (footer.ejs)
-
-Cara menjalankan program : node app.js
+Shopeedia adalah sebuah website e-commerce yang ditujukan untuk memenuhi spesifikasi tugas besar mata kuliah rekayasa perangkat lunak (IF3152)
 
 IF3152 - Rekayasa Perangkat Lunak
 Kelompok 6
@@ -18,5 +10,3 @@ Kelompok 6
 - Mario Abraham Sandroto    / 18216046
 - Nabila Rahmi Maulida      / 18216051
 - Savira Dwia Nadela        / 18216052
-
-

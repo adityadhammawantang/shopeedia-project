@@ -17,7 +17,7 @@
     <nav class="navbar navbar-default bg-light" style="z-index:2">
         <div class="container-fluid">
             <a class="navbar-brand" href="/catalog">
-                <img src="assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                <img src="../assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 Shopeedia
             </a>
             <form class="form-inline my-2 my-lg-0">
@@ -80,10 +80,18 @@
             <div class="container col-md-9">
                 <div class="row">
                     <div class="col">
-
+						<% if (product.discount > 0) { %>
+							<p class="card-subtitle" style="text-decoration: line-through; font-size:0.8rem">Rp.
+                                Rp. <%=product.price%>
+							<p>
+							<h6 class="card-subtitle">Rp.
+								<%=product.price - (product.price*product.discount/100)%>
+							</h6>
+                        <% } else { %>
                         <p>
-                            <%=product.price%>
+                            Rp. <%=product.price%>
                         </p>
+						<% } %>
                     </div>
                     <div class="col">
 
