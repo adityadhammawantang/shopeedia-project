@@ -6,6 +6,10 @@
 	<link rel="stylesheet" href="/login.css" type="text/css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
 	 crossorigin="anonymous">
+	 <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
 
 </head>
 
@@ -68,8 +72,20 @@
 			<label class="biru" for="product[discount]"><b>Diskon</b></label>
 			<input type="text" placeholder="Harga" name="product[discount]">
 
-			<label class="biru" for="product[category]"><b>Kategori</b></label>
-			<input type="text" placeholder="Kategori" name="product[category]" required>
+
+			<label class = "biru" for="selectCategory"><b>Kategori</b></label>
+			<select class="form-control" style="margin: 5px 0 22px 0" id="selectCategory" name="product[category]">
+				<% categories.forEach(function (category){ %>
+				<option>
+					<%=category%>
+				</option>
+				<% }) %>
+				<option>kategori baru</option>
+			</select>
+
+			<div id="addCategory">		
+			</div>
+
 			<label class="biru" for="product[stock]"><b>Jumlah Tersedia</b></label>
 			<input type="text" placeholder="Jumlah tersedia" name="product[stock]" required>
 			<label class="biru" for="product[image]"><b>Tautan gambar</b></label>
@@ -83,6 +99,20 @@
 		</div>
 
 	</form>
+
+	<script>
+			$("#selectCategory").change(function() {
+				if ($( "#selectCategory option:selected" ).text() == "kategori baru") {
+					$("#selectCategory").attr('name', ''); 
+					$("#addCategory").html('<label class="biru" for="product[category]"><b>Kategori</b></label><input type="text" id="selectCat" placeholder="Kategori" name="product[category]" required>')
+				} else {
+					$("#addCategory").html('')
+					$("#selectCat").attr('name','product[category]')
+				}
+			  })
+			  .trigger( "change" );
+			</script>
+			 
 </body>
 
 </html>

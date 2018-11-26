@@ -33,12 +33,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/views"));
 app.set("view engine", "ejs");
 
-
 const databaseUri = process.env.SHOPEEDIA_MONGODBURI || 'mongodb://localhost/shopeedia';
 
 mongoose.connect(databaseUri)
-      .then(() => console.log(`Database connected`))
-      .catch(err => console.log(`Database connection error: ${err.message}`));
+	.then(() => console.log(`Database connected`))
+	.catch(err => console.log(`Database connection error: ${err.message}`));
 
 app.use(function (req, res, next) {
 	res.locals.currentUser = req.user;
@@ -99,28 +98,56 @@ app.get("/logout", function (req, res) {
 
 //ROUTES FOR PRODUCTS AND CATALOG
 app.get("/catalog", function (req, res) {
-	var get=req.query.q;
-	if (get) {
-		Product.find({productName: new RegExp(get, "i")}, function (err, searchedProducts) {
-			if (err) {
-				console.log("err");
+	var get = req.query.q;
+	Product.distinct('category', function (err, categories) {
+		if (err) {
+			console.log(err);
+		} else {
+			if (get) {
+				Product.find({ productName: new RegExp(get, "i") }, function (err, searchedProducts) {
+					if (err) {
+						console.log("err");
+					} else {
+						res.render("catalog", { products: searchedProducts, categories: categories });
+					}
+				});
 			} else {
-				res.render("catalog", { products: searchedProducts });
+				Product.find({}, function (err, allProducts) {
+					if (err) {
+						console.log(err);
+					} else {
+						res.render("catalog", { products: allProducts, categories: categories });
+					}
+				});
 			}
-		});
-	} else {
-		Product.find({}, function (err, allProducts) {
-			if (err) {
-				console.log(err);
-			} else {
-				res.render("catalog", { products: allProducts });
-			}
-		});
-	}
+		}
+	});
+});
+
+app.get("/catalog/category/:categoryname", function (req, res) {
+	Product.distinct('category', function (err, categories) {
+		if (err) {
+			console.log(err);
+		} else {
+			Product.find({ category: req.params.categoryname }, function (err, products) {
+				if (err) {
+					console.log(err);
+				} else {
+					res.render("categoryShow", { products: products, categories: categories })
+				}
+			});
+		}
+	});
 });
 
 app.get("/catalog/add", isAdmin, function (req, res) {
-	res.render("addProduct");
+	Product.distinct("category", function (err, categories) {
+		if (err) {
+			console.log(err);
+		} else {
+			res.render("addProduct", { categories: categories })
+		}
+	});
 });
 
 app.get("/catalog/:id/edit", isAdmin, function (req, res) {
@@ -204,7 +231,6 @@ app.delete("/catalog/:id", isAdmin, function (req, res) {
 	});
 });
 
-
 //END OF PRODUCTS AND CATALOGS
 
 //ROUTES FOR ADMIN FUNCTIONS
@@ -213,14 +239,14 @@ app.get("/dashboard", isAdmin, function (req, res) {
 		if (err) {
 			console.log(err);
 		} else {
-			Transaction.find({}).populate('user').exec(function (err, allTransactions){
+			Transaction.find({}).populate('user').exec(function (err, allTransactions) {
 				if (err) {
 					console.log(err);
 				} else {
 					allComments.reverse();
 					allTransactions.reverse()
 					res.render("dashboard", { transactions: allTransactions, comments: allComments });
-				}	
+				}
 			});
 		}
 	});
@@ -249,7 +275,7 @@ app.get("/checkout", function (req, res) {
 							var p = {
 								productName: cartProduct.productName,
 								quantity: cartItem.quantity,
-								sub: (cartProduct.price - (cartProduct.price* cartProduct.discount / 100))  * cartItem.quantity
+								sub: (cartProduct.price - (cartProduct.price * cartProduct.discount / 100)) * cartItem.quantity
 							}
 							productList.push(p);
 							subtotal += cartProduct.price * cartItem.quantity;

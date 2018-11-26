@@ -13,7 +13,7 @@
 	<nav class="navbar navbar-default bg-light">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="/catalog">
-				<img src="./assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+				<img src="../../assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
 				Shopeedia
 			</a>
 			<% if (!currentUser) { %>
@@ -55,7 +55,7 @@
 
     <form action="/catalog/<%=product._id%>?_method=PUT" method="POST">
 		<div class="imgcontainer">
-			<img src="./assets/logo.png" alt="Avatar" class="avatar">
+			<img src="../../assets/logo.png" alt="Avatar" class="avatar">
 		</div>
 
 		<div class="container col-4">
@@ -66,7 +66,7 @@
 			<label class="biru" for="product[discount]"><b>Diskon</b></label>
 			<input type="text" value="<%=product.discount%>" name="product[discount]">
 			<label class="biru" for="product[category]"><b>Kategori</b></label>
-			<input type="text" value="<%=product.category%>" name="product[category]" required>
+			<input type="text" value="<%=product.category%>" name="product[category]" disabled required>
 			<label class="biru" for="product[stock]"><b>Jumlah Tersedia</b></label>
 			<input type="text" value="<%=product.stock%>" name="product[stock]" required>
 			<label class="biru" for="product[image]"><b>Tautan gambar</b></label>
