@@ -25,22 +25,28 @@
                 <span>&nbsp;&nbsp;&nbsp;</span>
                 <a href="/register">Sign Up</a>
             </span>
-            <% } else { %>
-            <span class="navbar-text">
-                <% if (currentUser.username == "admin") { %>
-                <a href="/dashboard"><strong>
-                        Dashboard</strong>
-                </a>
-                <% } else { %>
-                <a href="/profile">
-                    Profile <strong>
-                        <%=currentUser.username%></strong>
-                </a>
+			<% } else { %>
+                <span class="navbar-text">
+                    <% if (currentUser.username == "admin") { %>
+                    <a href="/dashboard"><strong>
+                            Dashboard</strong>
+                    </a>
+                    <span>&nbsp;&nbsp;&nbsp;</span>
+                    <% } else { %>
+                        <a href="/profile">
+                            Welcome, <strong>
+                                <%=currentUser.username%></strong>
+                        </a>
+                        <% if (Array.isArray(currentUser.cart) && currentUser.cart.length ) { %>
+                        <a href="/checkout">
+                            <strong> Checkout </strong>
+                        </a>
+                        <% } %>
+                        <span>&nbsp;&nbsp;&nbsp;</span>
+                    <% } %>
+                    <a href="/logout">Logout</a>
+                </span>
                 <% } %>
-                <span>&nbsp;&nbsp;&nbsp;</span>
-                <a href="/logout">Logout</a>
-            </span>
-            <% } %>
         </div>
     </nav>
 

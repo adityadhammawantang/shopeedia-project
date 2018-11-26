@@ -35,8 +35,8 @@ app.set("view engine", "ejs");
 
 const databaseUri = process.env.SHOPEEDIA_MONGODBURI || 'mongodb://localhost/shopeedia';
 
-mongoose.connect(databaseUri)
-	.then(() => console.log(`Database connected`))
+mongoose.connect(databaseUri, {useNewUrlParser: true})
+	.then(() => console.log(`Database connected at`, databaseUri))
 	.catch(err => console.log(`Database connection error: ${err.message}`));
 
 app.use(function (req, res, next) {
@@ -108,7 +108,8 @@ app.get("/catalog", function (req, res) {
 					if (err) {
 						console.log("err");
 					} else {
-						res.render("catalog", { products: searchedProducts, categories: categories });
+						var search = true;
+						res.render("catalog", { products: searchedProducts, categories: categories, s: search });
 					}
 				});
 			} else {
@@ -116,7 +117,8 @@ app.get("/catalog", function (req, res) {
 					if (err) {
 						console.log(err);
 					} else {
-						res.render("catalog", { products: allProducts, categories: categories });
+						var search = false;
+						res.render("catalog", { products: allProducts, categories: categories, s: search});
 					}
 				});
 			}

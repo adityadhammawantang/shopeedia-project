@@ -80,7 +80,7 @@
 					<%=category%>
 				</option>
 				<% }) %>
-				<option>kategori baru</option>
+				<option>Tambahkan kategori baru ...</option>
 			</select>
 
 			<div id="addCategory">		
@@ -102,12 +102,12 @@
 
 	<script>
 			$("#selectCategory").change(function() {
-				if ($( "#selectCategory option:selected" ).text() == "kategori baru") {
+				if ($( "#selectCategory option:selected" ).text() == "Tambahkan kategori baru ...") {
+					$("#addCategory").html('<label class="biru" for="product[category]"><b>Kategori</b></label><input type="text" id="selectCat" placeholder="Kategori" name="product[category]" required>');
 					$("#selectCategory").attr('name', ''); 
-					$("#addCategory").html('<label class="biru" for="product[category]"><b>Kategori</b></label><input type="text" id="selectCat" placeholder="Kategori" name="product[category]" required>')
 				} else {
-					$("#addCategory").html('')
-					$("#selectCat").attr('name','product[category]')
+					$("#addCategory").html('');
+					$("#selectCat").attr('name','product[category]');
 				}
 			  })
 			  .trigger( "change" );

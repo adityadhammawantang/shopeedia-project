@@ -32,19 +32,19 @@
 				<a href="/dashboard"><strong>
 						Dashboard</strong>
 				</a>
+				<span>&nbsp;&nbsp;&nbsp;</span>
 				<% } else { %>
-				<a href="/profile">
-					Welcome, <strong>
-						<%=currentUser.username%></strong>
-				</a>
-				<span>&nbsp;&nbsp;&nbsp;</span>
+					<a href="/profile">
+						Welcome, <strong>
+							<%=currentUser.username%></strong>
+					</a>
+					<% if (Array.isArray(currentUser.cart) && currentUser.cart.length ) { %>
+					<a href="/checkout">
+						<strong> Checkout </strong>
+					</a>
+					<% } %>
+					<span>&nbsp;&nbsp;&nbsp;</span>
 				<% } %>
-				<% if (Array.isArray(currentUser.cart) && currentUser.cart.length ) { %>
-				<a href="/checkout">
-					<strong> Checkout </strong>
-				</a>
-				<% } %>
-				<span>&nbsp;&nbsp;&nbsp;</span>
 				<a href="/logout">Logout</a>
 			</span>
 			<% } %>
@@ -53,13 +53,13 @@
 
 	<div class="container-fluid col-md-10">
 		<div class="row">
-			
-			<div class="container col-xs-12 col-md-9 mt-3">
+
+			<div class="container col-xs-12 col-md-9 mt-3" >
 				<div class="card">
 					<div class="card-header">
 						Transaksi
 					</div>
-					<table class="table">
+					<table class="table" style="overflow-y: scroll">
 						<thead>
 							<tr>
 								<th scope="col">ID Transaksi</th>
@@ -67,22 +67,33 @@
 								<th scope="col">Alamat</th>
 								<th scope="col">Telepon</th>
 								<th scope="col">Jumlah</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody style="font-size:0.9rem">
 							<% transactions.forEach(function(transaction){ %>
 							<tr>
-								<th scope="row"><%=transaction._id%></th>
-								<td><%=transaction.user.name%></td>
-								<td><%=transaction.user.address%></td>
-								<td><%=transaction.user.phone%></td>
-								<td><%=transaction.sum%></td>
+								<td>
+									<%=transaction._id%>
+								</td>
+								<td>
+									<%=transaction.user.name%>
+								</td>
+								<td>
+									<%=transaction.user.address%>
+								</td>
+								<td>
+									<%=transaction.user.phone%>
+								</td>
+								<td>
+									<%=transaction.sum%>
+								</td>
 								<td>
 									<form action="status/<%=transaction._id%>" method="post">
 										<% if (transaction.status=="confirmed") { %>
-											<button class="btn btn-xs btn-success" name="paid" value="paid">Paid</button>
+										<button class="btn btn-xs btn-success" name="paid" value="paid">Paid</button>
 										<% } else if (transaction.status=="paid") { %>
-											<button class="btn btn-xs btn-success" name="sent" value="sent">Sent</button>
+										<button class="btn btn-xs btn-success" name="sent" value="sent">Sent</button>
 										<% } else {} %>
 									</form>
 								</td>
@@ -93,28 +104,28 @@
 				</div>
 			</div>
 			<div class="container col-md-3">
-					<br>
-					<a class="btn btn-primary m-2" role="button" href="/catalog/add">+ Produk Baru</a>
-					<br>
-					<a class="btn btn-primary m-2" role="button" href="/catalog">Ubah Produk</a>
-					<div class="card mt-4">
-						<div class="card-header">
-							Ulasan Pembelian
-						</div>
-						<% comments.forEach(function(comment){ %>
-						<div class="card-body p-3" style="padding-top:0.5rem!important; padding-bottom:1rem!important; border-bottom:0.5px solid #EEE">
-							<blockquote class="blockquote mb-0" style="font-size:0.85rem;">
-								<p style="margin-bottom: 0.5rem;">
-									<%=comment.text%>
-								</p>
-								<footer class="blockquote-footer">
-									<%=comment.author.username%> <cite title="Source Title">
-										<%=comment.product%></cite></footer>
-							</blockquote>
-						</div>
-						<% }) %>
+				<br>
+				<a class="btn btn-primary m-2" role="button" href="/catalog/add">+ Produk Baru</a>
+				<br>
+				<a class="btn btn-primary m-2" role="button" href="/catalog">Ubah Produk</a>
+				<div class="card mt-4">
+					<div class="card-header">
+						Ulasan Pembelian
 					</div>
+					<% comments.forEach(function(comment){ %>
+					<div class="card-body p-3" style="padding-top:0.5rem!important; padding-bottom:1rem!important; border-bottom:0.5px solid #EEE">
+						<blockquote class="blockquote mb-0" style="font-size:0.85rem;">
+							<p style="margin-bottom: 0.5rem;">
+								<%=comment.text%>
+							</p>
+							<footer class="blockquote-footer">
+								<%=comment.author.username%> <cite title="Source Title">
+									<%=comment.product%></cite></footer>
+						</blockquote>
+					</div>
+					<% }) %>
 				</div>
+			</div>
 		</div>
 	</div>
 	</div>

@@ -37,28 +37,27 @@
 				<a href="/register">Sign Up</a>
 			</span>
 			<% } else { %>
-			<span class="navbar-text">
-				<% if (currentUser.username == "admin") { %>
-				<a href="/dashboard"><strong>
-						Dashboard</strong>
-				</a>
-				<span>&nbsp;&nbsp;&nbsp;</span>
-				<% } else { %>
-				<a href="/profile">
-					Welcome, <strong>
-						<%=currentUser.username%></strong>
-				</a>
-				<span>&nbsp;&nbsp;&nbsp;</span>
+				<span class="navbar-text">
+					<% if (currentUser.username == "admin") { %>
+					<a href="/dashboard"><strong>
+							Dashboard</strong>
+					</a>
+					<span>&nbsp;&nbsp;&nbsp;</span>
+					<% } else { %>
+						<a href="/profile">
+							Welcome, <strong>
+								<%=currentUser.username%></strong>
+						</a>
+						<% if (Array.isArray(currentUser.cart) && currentUser.cart.length ) { %>
+						<a href="/checkout">
+							<strong> Checkout </strong>
+						</a>
+						<% } %>
+						<span>&nbsp;&nbsp;&nbsp;</span>
+					<% } %>
+					<a href="/logout">Logout</a>
+				</span>
 				<% } %>
-				<% if (Array.isArray(currentUser.cart) && currentUser.cart.length ) { %>
-				<a href="/checkout">
-					<strong> Checkout </strong>
-				</a>
-				<% } %>
-				<span>&nbsp;&nbsp;&nbsp;</span>
-				<a href="/logout">Logout</a>
-			</span>
-			<% } %>
 		</div>
 	</nav>
 
@@ -77,6 +76,7 @@
 
 	<div class="container col-8">
 		<br>
+		<% if (!s) { %> 
 		<div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
 			<div class="carousel-inner">
 				<div class="carousel-item active">
@@ -101,6 +101,7 @@
 			</a>
 		</div>
 		<br>
+		<% } %>
 		<h1><span class="badge badge-primary">Products</span></h1>
 		<br>
 		<div class="card-deck">
@@ -156,8 +157,8 @@
 				<div class="col-6" style="background-color:white">
 					<div class="list-group">
 						<% categories.forEach(function(category, index){ %>
-						<% if (index % 2 == 1) { %>
-						<a href="#" class="list-group-item list-group-item-action">
+						<% if (index % 2 == 0) { %>
+						<a href="/catalog/category/<%=category%>" class="list-group-item list-group-item-action">
 							<%=category%></a>
 						<% } %>
 						<% }) %>
@@ -166,8 +167,8 @@
 				<div class="col-6" style="background-color:white">
 					<div class="list-group">
 						<% categories.forEach(function(category, index){ %>
-						<% if (index % 2 == 0) { %>
-						<a href="#" class="list-group-item list-group-item-action">
+						<% if (index % 2 == 1) { %>
+						<a href="/catalog/category/<%=category%>" class="list-group-item list-group-item-action">
 							<%=category%></a>
 						<% } %>
 						<% }) %>
